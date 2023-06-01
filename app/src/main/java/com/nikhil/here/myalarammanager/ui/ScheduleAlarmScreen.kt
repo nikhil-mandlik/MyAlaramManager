@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings.ACTION_NOTIFICATION_ASSISTANT_SETTINGS
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -61,14 +60,6 @@ fun ScheduleAlarmScreen(
 ) {
 
     val context = LocalContext.current
-
-    var isExactAlarmPermGranted by remember {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            mutableStateOf(false)
-        } else {
-            mutableStateOf(true)
-        }
-    }
 
     var isPostNotificationPermGranted by remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -287,32 +278,31 @@ fun ScheduleAlarmScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+
+
         Button(
             onClick = {
                 completeDate?.let { timestamp ->
-                    val openPostNotificationSettings = shouldShowRequestPermissionRationale(
-                        context as Activity,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    )
 
-                    val openExactAlarmSettings = shouldShowRequestPermissionRationale(
-                        context as Activity,
-                        Manifest.permission.SCHEDULE_EXACT_ALARM
-                    )
+                    val openPostNotificationSettings =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            shouldShowRequestPermissionRationale(
+                                context as Activity,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            )
+                        } else {
+                            false
+                        }
 
-                    Log.i(
-                        TAG,
-                        "ScheduleAlarmScreen: $timestamp isExactPermissionGranted $isExactAlarmPermGranted isPostNotificationPermisionGranted $isPostNotificationPermGranted openExactAlarmSettings : $openExactAlarmSettings openPostNotificationSettings $openPostNotificationSettings"
-                    )
-
-                    if (isExactAlarmPermGranted) {
+                    if (mainViewModel.hasExactAlarmPermission()) {
                         if (isPostNotificationPermGranted) {
                             mainViewModel.scheduleNotification(
                                 alarm = AlarmData(
                                     triggerTimestamp = timestamp,
                                     title = title.text,
                                     isExact = isExact,
-                                    allowWhileIdle = allowWhileIdle
+                                    allowWhileIdle = allowWhileIdle,
+                                    dateTimeString = "$selectedDate $selectedTime"
                                 )
                             )
                             context.showToast(
@@ -320,7 +310,7 @@ fun ScheduleAlarmScreen(
                             )
                             navigateBack()
                         } else {
-                            if (openPostNotificationSettings.not()) {
+                            if (openPostNotificationSettings.not() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 postNotifPermissionLauncher.launch(
                                     listOf(Manifest.permission.POST_NOTIFICATIONS).toTypedArray()
                                 )
@@ -329,13 +319,7 @@ fun ScheduleAlarmScreen(
                             }
                         }
                     } else {
-                        if (openExactAlarmSettings.not()) {
-                            exactAlarmPermissionLauncher.launch(
-                                listOf(Manifest.permission.SCHEDULE_EXACT_ALARM).toTypedArray()
-                            )
-                        } else {
-                            context.startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
-                        }
+                        context.startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
                     }
                 } ?: run {
                     context.showToast(
@@ -346,6 +330,7 @@ fun ScheduleAlarmScreen(
         ) {
             Text(text = "Schedule Alarm")
         }
+
 
     }
 }

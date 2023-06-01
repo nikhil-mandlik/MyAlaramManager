@@ -23,12 +23,12 @@ class MyAlarmManager @Inject constructor(
         const val ALARM_TIMESTAMP = "alarmTimestamp"
         const val ALARM_TYPE_EXACT_OR_INEXACT = "alarmTypeExactOrInExact"
         const val ALARM_STATE_ALLOW_WHILE_IDLE = "allowWhileIdle"
+        const val ALARM_ID = "myAlarmId"
     }
 
     private var alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     fun scheduleAlarm(alarm: AlarmData) {
-        Log.i(TAG, "scheduleAlarm: $alarm currentTimestamp ${System.currentTimeMillis()}")
         val pendingIntent = createAlarmIntent(alarmData = alarm)
         if (alarm.isExact) {
             if (alarm.allowWhileIdle) {
@@ -82,12 +82,20 @@ class MyAlarmManager @Inject constructor(
             putExtra(ALARM_TIMESTAMP, alarmData.triggerTimestamp)
             putExtra(ALARM_TYPE_EXACT_OR_INEXACT, alarmData.isExact)
             putExtra(ALARM_STATE_ALLOW_WHILE_IDLE, alarmData.allowWhileIdle)
+            putExtra(ALARM_ID, alarmData.id)
         }
         return PendingIntent.getBroadcast(
             context,
-            ALARM_INTENT_REQUEST_CODE,
+            alarmData.id.toInt(),
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
+    }
+
+
+    fun rescheduleAlarms(alarms : List<AlarmData>) {
+        alarms.map {
+            scheduleAlarm(it)
+        }
     }
 }

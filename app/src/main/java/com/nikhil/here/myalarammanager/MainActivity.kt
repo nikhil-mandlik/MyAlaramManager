@@ -45,7 +45,8 @@ class MainActivity : ComponentActivity() {
                                 HomeScreen(
                                     navigateToScheduleAlarm = {
                                         navController.navigate(NavGraph.ScheduleAlarmScreen.route)
-                                    }
+                                    },
+                                    mainViewModel = mainViewModel
                                 )
                             }
 

@@ -106,4 +106,13 @@ dependencies {
     implementation("org.orbit-mvi:orbit-viewmodel:$orbit_version")
     testImplementation("org.orbit-mvi:orbit-test:$orbit_version")
 
+    // gson
+    implementation ("com.google.code.gson:gson:$gson_version")
+
+    // Room Database
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
+
 }

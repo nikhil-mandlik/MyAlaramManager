@@ -9,6 +9,8 @@ buildscript {
         orbit_version = "4.3.2"
         coroutine_version = "1.6.1"
         pluto_version = "2.0.6"
+        gson_version = "2.10.1"
+        room_version = '2.5.1'
     }
     dependencies {
         classpath("com.google.dagger:hilt-android-gradle-plugin:$hilt_version")
