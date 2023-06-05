@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import com.nikhil.here.myalarammanager.domain.alarm.AlarmData
+import com.nikhil.here.myalarammanager.domain.alarm.AlarmMode
 import com.nikhil.here.myalarammanager.ui.extensions.showToast
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -280,33 +281,88 @@ fun ScheduleAlarmScreen(
 
 
 
-        Button(
-            onClick = {
-                completeDate?.let { timestamp ->
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)) {
+            Button(
+                onClick = {
+                    completeDate?.let { timestamp ->
 
-                    val openPostNotificationSettings =
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            shouldShowRequestPermissionRationale(
-                                context as Activity,
-                                Manifest.permission.POST_NOTIFICATIONS
-                            )
+                        val openPostNotificationSettings =
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                shouldShowRequestPermissionRationale(
+                                    context as Activity,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                )
+                            } else {
+                                false
+                            }
+
+                        if (mainViewModel.hasExactAlarmPermission()) {
+                            if (isPostNotificationPermGranted) {
+                                mainViewModel.scheduleNotification(
+                                    alarm = AlarmData(
+                                        triggerTimestamp = timestamp,
+                                        title = title.text,
+                                        isExact = isExact,
+                                        allowWhileIdle = allowWhileIdle,
+                                        dateTimeString = "$selectedDate $selectedTime",
+                                        alarmMode = AlarmMode.ALARM_MANAGER
+                                    )
+                                )
+                                context.showToast(
+                                    message = "Alarm Scheduled"
+                                )
+                                navigateBack()
+                            } else {
+                                if (openPostNotificationSettings.not() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    postNotifPermissionLauncher.launch(
+                                        listOf(Manifest.permission.POST_NOTIFICATIONS).toTypedArray()
+                                    )
+                                } else {
+                                    context.startActivity(Intent(ACTION_NOTIFICATION_ASSISTANT_SETTINGS))
+                                }
+                            }
                         } else {
-                            false
+                            context.startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
                         }
+                    } ?: run {
+                        context.showToast(
+                            message = "Please select date and time"
+                        )
+                    }
+                }
+            ) {
+                Text(text = "Schedule AlarmManager")
+            }
 
-                    if (mainViewModel.hasExactAlarmPermission()) {
+            Button(
+                onClick = {
+                    completeDate?.let { timestamp ->
+
+                        val openPostNotificationSettings =
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                shouldShowRequestPermissionRationale(
+                                    context as Activity,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                )
+                            } else {
+                                false
+                            }
+
                         if (isPostNotificationPermGranted) {
-                            mainViewModel.scheduleNotification(
+                            mainViewModel.scheduleNotificationThroughWorkManager(
                                 alarm = AlarmData(
                                     triggerTimestamp = timestamp,
                                     title = title.text,
                                     isExact = isExact,
                                     allowWhileIdle = allowWhileIdle,
-                                    dateTimeString = "$selectedDate $selectedTime"
+                                    dateTimeString = "$selectedDate $selectedTime",
+                                    alarmMode = AlarmMode.WORK_MANAGER
                                 )
                             )
                             context.showToast(
-                                message = "Alarm Scheduled"
+                                message = "Alarm Scheduled with work manager"
                             )
                             navigateBack()
                         } else {
@@ -318,18 +374,18 @@ fun ScheduleAlarmScreen(
                                 context.startActivity(Intent(ACTION_NOTIFICATION_ASSISTANT_SETTINGS))
                             }
                         }
-                    } else {
-                        context.startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                    } ?: run {
+                        context.showToast(
+                            message = "Please select date and time"
+                        )
                     }
-                } ?: run {
-                    context.showToast(
-                        message = "Please select date and time"
-                    )
                 }
+            ) {
+                Text(text = "Schedule WorkManager")
             }
-        ) {
-            Text(text = "Schedule Alarm")
+
         }
+
 
 
     }

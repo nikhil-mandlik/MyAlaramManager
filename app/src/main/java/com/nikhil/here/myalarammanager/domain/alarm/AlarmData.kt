@@ -21,6 +21,16 @@ data class AlarmData(
     @SerializedName("triggerDelay")
     val triggerDelay: Long? = null,
     @SerializedName("dateTimeString")
-    val dateTimeString: String
+    val dateTimeString: String,
+    @SerializedName("alarmMode")
+    val alarmMode: AlarmMode
 )
+
+
+enum class AlarmMode {
+    @SerializedName("ALARM_MANAGER")
+    ALARM_MANAGER,
+    @SerializedName("WORK_MANAGER")
+    WORK_MANAGER
+}
 

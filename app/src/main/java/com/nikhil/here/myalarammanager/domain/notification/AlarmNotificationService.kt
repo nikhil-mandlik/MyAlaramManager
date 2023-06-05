@@ -7,9 +7,13 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.nikhil.here.myalarammanager.MainActivity
 import com.nikhil.here.myalarammanager.R
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AlarmNotificationService @Inject constructor(
     @ApplicationContext private val context: Context
 ) {

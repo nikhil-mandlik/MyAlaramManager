@@ -46,15 +46,6 @@ class AlarmBroadcastReceiver  : BroadcastReceiver() {
         val allowWhileIdle  = intent?.getBooleanExtra(MyAlarmManager.ALARM_STATE_ALLOW_WHILE_IDLE, false) ?: false
         val id  = intent?.getLongExtra(MyAlarmManager.ALARM_ID, -1L) ?: -1L
 
-        val extras = intent?.extras
-        if (extras != null) {
-            for (key in extras.keySet()) {
-                val value = extras.get(key)
-                Log.i(TAG, "onReceive: $key : $value")
-            }
-        }
-
-
         val delay = triggerTimeStamp.let {
             if (it >= 0) {
                 actualTriggerTime - it
