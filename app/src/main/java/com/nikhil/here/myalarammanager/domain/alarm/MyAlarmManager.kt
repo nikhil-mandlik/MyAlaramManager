@@ -33,13 +33,13 @@ class MyAlarmManager @Inject constructor(
         if (alarm.isExact) {
             if (alarm.allowWhileIdle) {
                 alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC,
+                    AlarmManager.RTC_WAKEUP,
                     alarm.triggerTimestamp,
                     pendingIntent
                 )
             } else {
                 alarmManager.setExact(
-                    AlarmManager.RTC,
+                    AlarmManager.RTC_WAKEUP,
                     alarm.triggerTimestamp,
                     pendingIntent
                 )
@@ -47,13 +47,13 @@ class MyAlarmManager @Inject constructor(
         } else {
             if (alarm.allowWhileIdle) {
                 alarmManager.setAndAllowWhileIdle(
-                    AlarmManager.RTC,
+                    AlarmManager.RTC_WAKEUP,
                     alarm.triggerTimestamp,
                     pendingIntent
                 )
             } else {
                 alarmManager.set(
-                    AlarmManager.RTC,
+                    AlarmManager.RTC_WAKEUP,
                     alarm.triggerTimestamp,
                     pendingIntent
                 )

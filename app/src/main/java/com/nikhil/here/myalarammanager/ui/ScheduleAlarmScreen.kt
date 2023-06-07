@@ -307,7 +307,12 @@ fun ScheduleAlarmScreen(
                                         isExact = isExact,
                                         allowWhileIdle = allowWhileIdle,
                                         dateTimeString = "$selectedDate $selectedTime",
-                                        alarmMode = AlarmMode.ALARM_MANAGER
+                                        alarmMode = AlarmMode.ALARM_MANAGER,
+                                        scheduleMetaData = AlarmData.MetaData(
+                                            isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context),
+                                            appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context)
+                                        ),
+                                        executionMetaData = null
                                     )
                                 )
                                 context.showToast(
@@ -358,7 +363,12 @@ fun ScheduleAlarmScreen(
                                     isExact = isExact,
                                     allowWhileIdle = allowWhileIdle,
                                     dateTimeString = "$selectedDate $selectedTime",
-                                    alarmMode = AlarmMode.WORK_MANAGER
+                                    alarmMode = AlarmMode.WORK_MANAGER,
+                                    scheduleMetaData = AlarmData.MetaData(
+                                        isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context),
+                                        appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context)
+                                    ),
+                                    executionMetaData = null
                                 )
                             )
                             context.showToast(

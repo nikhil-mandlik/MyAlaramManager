@@ -8,6 +8,7 @@ import com.nikhil.here.myalarammanager.data.MyDatabase
 import com.nikhil.here.myalarammanager.domain.alarm.AlarmData
 import com.nikhil.here.myalarammanager.domain.alarm.MyAlarmManager
 import com.nikhil.here.myalarammanager.domain.notification.AlarmNotificationService
+import com.nikhil.here.myalarammanager.ui.DozeModeAndAppStandByChecker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -68,7 +69,13 @@ class AlarmBroadcastReceiver  : BroadcastReceiver() {
                 myDatabase.alarmDao().updateAlarm(
                     isTriggered = true,
                     triggerDelay = delay?:-1L,
-                    id = id
+                    id = id,
+                    executionMetaData = context?.let {
+                        AlarmData.MetaData(
+                            isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context = context),
+                            appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context = context)
+                        )
+                    }
                 )
             } catch (e : Exception) {
                 Log.i(TAG, "onReceive: $e")

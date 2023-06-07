@@ -7,8 +7,10 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.nikhil.here.myalarammanager.data.MyDatabase
+import com.nikhil.here.myalarammanager.domain.alarm.AlarmData
 import com.nikhil.here.myalarammanager.domain.alarm.MyAlarmManager
 import com.nikhil.here.myalarammanager.domain.notification.AlarmNotificationService
+import com.nikhil.here.myalarammanager.ui.DozeModeAndAppStandByChecker
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -58,7 +60,11 @@ class NotificationWorker @AssistedInject constructor(
             myDatabase.alarmDao().updateAlarm(
                 isTriggered = true,
                 triggerDelay = delay ?: -1L,
-                id = id
+                id = id,
+                executionMetaData = AlarmData.MetaData(
+                    isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context = appContext),
+                    appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context = appContext)
+                )
             )
 
             return Result.success(

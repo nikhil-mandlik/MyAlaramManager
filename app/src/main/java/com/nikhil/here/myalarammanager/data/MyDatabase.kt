@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.nikhil.here.myalarammanager.domain.alarm.AlarmData
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
     version = 1,
     exportSchema = true
 )
+@TypeConverters(MyTypeConverters::class)
 abstract class MyDatabase : RoomDatabase() {
     companion object {
         private const val TAG = "MyDatabase"
@@ -33,8 +35,8 @@ interface AlarmDao {
     @Query("SELECT * FROM `my_alarm` ORDER BY `triggerTimestamp` DESC")
     fun fetchAlarms(): Flow<List<AlarmData>>
 
-    @Query("UPDATE `my_alarm` SET `isTriggered`=:isTriggered, `triggerDelay`=:triggerDelay WHERE `id`=:id")
-    suspend fun updateAlarm(isTriggered: Boolean, triggerDelay: Long, id: Long)
+    @Query("UPDATE `my_alarm` SET `isTriggered`=:isTriggered, `triggerDelay`=:triggerDelay, `executionMetaData`=:executionMetaData WHERE `id`=:id")
+    suspend fun updateAlarm(isTriggered: Boolean, triggerDelay: Long, id: Long, executionMetaData: AlarmData.MetaData?)
 
 
     @Query("DELETE FROM `my_alarm` WHERE `isTriggered`=1")
