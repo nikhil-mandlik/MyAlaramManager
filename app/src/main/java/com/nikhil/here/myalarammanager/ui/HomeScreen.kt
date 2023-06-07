@@ -27,8 +27,6 @@ fun HomeScreen(
 ) {
     val mainState by mainViewModel.container.stateFlow.collectAsState()
 
-
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,8 +50,7 @@ fun HomeScreen(
                 Text(text = "Delete Alarms")
             }
         }
-
-        Divider(modifier = Modifier.padding(16.dp))
+        Divider(modifier = Modifier.padding(4.dp))
         LazyColumn {
             items(
                 items = mainState.alarms,
@@ -64,7 +61,7 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }

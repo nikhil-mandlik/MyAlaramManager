@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,11 +38,12 @@ fun AlarmListItem(
                 shape = RoundedCornerShape(12.dp),
                 color = Color.Black
             )
-            .padding(8.dp)
+            .padding(horizontal = 8.dp)
     ) {
-        Text(text = alarmData.title, style = MaterialTheme.typography.titleMedium)
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(text = alarmData.dateTimeString, style = MaterialTheme.typography.bodyMedium)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = alarmData.title, style = MaterialTheme.typography.titleSmall)
+            Text(text = alarmData.dateTimeString, style = MaterialTheme.typography.bodyMedium)
+        }
         Spacer(modifier = Modifier.height(4.dp))
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
@@ -54,14 +56,14 @@ fun AlarmListItem(
                         text = "isExact : ${alarmData.isExact}",
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 1,
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        modifier = Modifier.padding(vertical = 2.dp)
                     )
 
                     Text(
                         text = "allowWhileIdle : ${alarmData.allowWhileIdle}",
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 1,
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        modifier = Modifier.padding(vertical = 2.dp)
                     )
                 }
 
@@ -76,13 +78,13 @@ fun AlarmListItem(
                 }} min (${alarmData.triggerDelay})",
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier.padding(vertical = 2.dp)
             )
 
             Text(
                 text = "mode: ${alarmData.alarmMode}", style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier.padding(vertical = 2.dp)
             )
 
             alarmData.scheduleMetaData?.let { scheduleMetaData ->
