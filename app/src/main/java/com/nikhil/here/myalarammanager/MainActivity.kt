@@ -14,18 +14,24 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.nikhil.here.myalarammanager.ui.DozeModeAndAppStandByChecker
 import com.nikhil.here.myalarammanager.ui.HomeScreen
 import com.nikhil.here.myalarammanager.ui.MainViewModel
 import com.nikhil.here.myalarammanager.ui.ScheduleAlarmScreen
 import com.nikhil.here.myalarammanager.ui.navigation.NavGraph
 import com.nikhil.here.myalarammanager.ui.theme.MyAlaramManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
 
     private val mainViewModel by viewModels<MainViewModel>()
+
+
+    @Inject
+    lateinit var dozeModeAndAppStandByChecker: DozeModeAndAppStandByChecker
 
     @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +61,8 @@ class MainActivity : ComponentActivity() {
                                     mainViewModel = mainViewModel,
                                     navigateBack = {
                                         navController.popBackStack()
-                                    }
+                                    },
+                                    dozeModeAndAppStandByChecker = dozeModeAndAppStandByChecker
                                 )
                             }
                         }

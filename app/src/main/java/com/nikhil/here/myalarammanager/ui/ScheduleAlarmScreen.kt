@@ -52,11 +52,11 @@ import java.util.Locale
 
 private const val TAG = "ScheduleAlarmScreen"
 
-@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleAlarmScreen(
     mainViewModel: MainViewModel,
+    dozeModeAndAppStandByChecker : DozeModeAndAppStandByChecker,
     navigateBack: () -> Unit
 ) {
 
@@ -309,8 +309,8 @@ fun ScheduleAlarmScreen(
                                         dateTimeString = "$selectedDate $selectedTime",
                                         alarmMode = AlarmMode.ALARM_MANAGER,
                                         scheduleMetaData = AlarmData.MetaData(
-                                            isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context),
-                                            appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context)
+                                            isInDozeMode = dozeModeAndAppStandByChecker.isInDozeMode(),
+                                            appStandbyBucket = dozeModeAndAppStandByChecker.getAppStandbyBucket()
                                         ),
                                         executionMetaData = null
                                     )
@@ -365,8 +365,8 @@ fun ScheduleAlarmScreen(
                                     dateTimeString = "$selectedDate $selectedTime",
                                     alarmMode = AlarmMode.WORK_MANAGER,
                                     scheduleMetaData = AlarmData.MetaData(
-                                        isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context),
-                                        appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context)
+                                        isInDozeMode = dozeModeAndAppStandByChecker.isInDozeMode(),
+                                        appStandbyBucket = dozeModeAndAppStandByChecker.getAppStandbyBucket()
                                     ),
                                     executionMetaData = null
                                 )

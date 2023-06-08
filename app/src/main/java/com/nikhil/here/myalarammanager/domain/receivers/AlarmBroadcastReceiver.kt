@@ -30,6 +30,9 @@ class AlarmBroadcastReceiver  : BroadcastReceiver() {
     @Inject
     lateinit var myDatabase: MyDatabase
 
+    @Inject
+    lateinit var dozeModeAndAppStandByChecker: DozeModeAndAppStandByChecker
+
 
     private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         Log.e(TAG, "exception $throwable ")
@@ -72,8 +75,8 @@ class AlarmBroadcastReceiver  : BroadcastReceiver() {
                     id = id,
                     executionMetaData = context?.let {
                         AlarmData.MetaData(
-                            isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context = context),
-                            appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context = context)
+                            isInDozeMode = dozeModeAndAppStandByChecker.isInDozeMode(),
+                            appStandbyBucket = dozeModeAndAppStandByChecker.getAppStandbyBucket()
                         )
                     }
                 )

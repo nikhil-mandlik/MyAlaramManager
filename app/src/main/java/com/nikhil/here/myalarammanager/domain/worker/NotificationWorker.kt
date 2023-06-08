@@ -20,7 +20,8 @@ class NotificationWorker @AssistedInject constructor(
     @Assisted private val appContext: Context,
     @Assisted private val workerParams: WorkerParameters,
     private val notificationService: AlarmNotificationService,
-    private val myDatabase: MyDatabase
+    private val myDatabase: MyDatabase,
+    private val dozeModeAndAppStandByChecker: DozeModeAndAppStandByChecker
 ) : CoroutineWorker(appContext, workerParams) {
 
     companion object {
@@ -62,8 +63,8 @@ class NotificationWorker @AssistedInject constructor(
                 triggerDelay = delay ?: -1L,
                 id = id,
                 executionMetaData = AlarmData.MetaData(
-                    isInDozeMode = DozeModeAndAppStandByChecker.isInDozeMode(context = appContext),
-                    appStandbyBucket = DozeModeAndAppStandByChecker.getAppStandbyBucket(context = appContext)
+                    isInDozeMode = dozeModeAndAppStandByChecker.isInDozeMode(),
+                    appStandbyBucket = dozeModeAndAppStandByChecker.getAppStandbyBucket()
                 )
             )
 
