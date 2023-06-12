@@ -48,5 +48,7 @@ class DozeModeAndAppStandByChecker
         return level?.toString() ?: "unknown"
     }
 
+    fun isInPowerSaveMode() = powerManager.isPowerSaveMode
+
 
 }

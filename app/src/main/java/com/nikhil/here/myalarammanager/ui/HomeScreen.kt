@@ -16,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,15 +25,23 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HomeScreen(
     navigateToScheduleAlarm: () -> Unit,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    dozeModeAndAppStandByChecker: DozeModeAndAppStandByChecker
 ) {
     val mainState by mainViewModel.container.stateFlow.collectAsState()
+
+    val isInPowerSaveMode by remember {
+        mutableStateOf(dozeModeAndAppStandByChecker.isInPowerSaveMode())
+    }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Text(text = "is in power save mode $isInPowerSaveMode")
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,

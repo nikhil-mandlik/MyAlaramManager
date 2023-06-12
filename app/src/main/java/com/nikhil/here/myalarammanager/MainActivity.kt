@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var dozeModeAndAppStandByChecker: DozeModeAndAppStandByChecker
 
+
     @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,8 @@ class MainActivity : ComponentActivity() {
                                     navigateToScheduleAlarm = {
                                         navController.navigate(NavGraph.ScheduleAlarmScreen.route)
                                     },
-                                    mainViewModel = mainViewModel
+                                    mainViewModel = mainViewModel,
+                                    dozeModeAndAppStandByChecker =  dozeModeAndAppStandByChecker
                                 )
                             }
 
